@@ -1,0 +1,18 @@
+@import '~antd/dist/antd.css';
+.site-layout .site-layout-background {
+    background: #fff;
+}
+.ant-layout{
+    height: 100vh;
+}
+span.anticon.anticon-menu-fold{
+    padding-left: 24px;
+}
+.sider-title {
+    color: white;
+    font-size: 20px;
+    line-height: 20px;
+    text-align: center;
+    padding: 10px 0;
+    border-bottom: 2px solid #eeeeee;
+}
