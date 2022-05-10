@@ -10,8 +10,10 @@ import CharacterList from '../views/powerManage/CharacterList'
 import NewsCreate from '../views/newsManage/NewsCreate'
 import NewsList from '../views/newsManage/NewsList'
 import NewsDraft from '../views/newsManage/NewsDraft'
+import NewsSort from '../views/newsManage/NewsSort'
 import CheckList from '../views/checkManage/CheckList'
 import PublishList from '../views/publishManage/PublishList'
+import Center from '../views/userInfo/Center'
 export default function IndeRouter() {
   return (
     <HashRouter>
@@ -21,15 +23,16 @@ export default function IndeRouter() {
                 </RequireAuth>}>
               <Route index element={<Home/>}></Route>
               <Route path="home" element={<Home/>}></Route>
+              <Route path="userinfo/center" element={<Center/>}></Route>
               <Route path="user-manage/list" element={<UserList/>}></Route>
-              <Route path="power-manage/power-list" element={<PowerList/>}></Route>
-              <Route path="power-manage/charactor-list" element={<CharacterList/>}></Route>       
+              <Route path="power-manage/roles" element={<PowerList/>}></Route>
+              <Route path="power-manage/characters" element={<CharacterList/>}></Route>       
               <Route path="news-manage/list" element={<NewsList/>}></Route>
-              <Route path="news-manage/create" element={<NewsCreate/>}></Route>      
-              <Route path="news-manage/draft" element={<NewsDraft/>}></Route>    
+              <Route path="news-manage/create" element={<NewsCreate/>}></Route>  
+              <Route path="news-manage/sort" element={<NewsSort/>}></Route>   
+              <Route path="news-manage/draft" element={<NewsDraft/>}></Route>  
               <Route path="check-manage/list" element={<CheckList/>}></Route>      
               <Route path="publish-manage" element={<PublishList/>}></Route>      
-
             </Route>
             <Route path="/login" element={<Login/>}></Route>
             <Route path="*" element={<NotFound/>}></Route>
@@ -39,7 +42,7 @@ export default function IndeRouter() {
 }
 
 function RequireAuth({children}){
-    const isLogin=localStorage.getItem('token')
-    return isLogin?children:<Navigate to="/login"/>
+  const token=localStorage.getItem('token')
+  return token?children:<Navigate to="/login"/>
 }
 

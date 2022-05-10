@@ -9,6 +9,8 @@
     "antd": "^4.20.1",
     "axios": "^0.27.2",
     "http-proxy-middleware": "^2.0.6",
+    "mobx": "^6.5.0",
+    "mobx-react": "^7.4.0",
     "qs": "^6.10.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",

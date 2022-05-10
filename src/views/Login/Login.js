@@ -1,8 +1,9 @@
 import React,{useState} from 'react'
+import {AdminStore} from '../../store/index'
 import { Form, Input, Button ,Card} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { loginRequest,registerRequest } from '../../request/admin';
+import { loginRequest,registerRequest} from '../../request/admin';
 
 const bgStyle={
     backgroundColor:"#36cfc9 ",
@@ -11,18 +12,9 @@ const bgStyle={
     justifyContent:'center',
     alignItems:'center'
 }
+
 export default function Login() {
     const [tab, settab] = useState(1);
-    const navigate = useNavigate()
-    
-    async function handleLogin(value){
-        const res=await loginRequest(value)
-        if(res.data.status===200){
-          console.log(res)
-            localStorage.setItem('token',res.token)
-            navigate('/home') 
-        }
-    }
     async function handleRegister(value){
         const res=await registerRequest(value)
         if(res.data.status===200){
@@ -37,7 +29,9 @@ export default function Login() {
             <Card bordered>
                 {
                     tab===1?
-                    <LoginTab handleLogin={handleLogin} changeTab={changeTab}/>
+                    <LoginTab handleLogin={(value)=>{
+                      AdminStore.requireLogin(value)
+                    }} changeTab={changeTab}/>
                     :<RegiterTab handleRegister={handleRegister} changeTab={changeTab}/>
                 }
             </Card>

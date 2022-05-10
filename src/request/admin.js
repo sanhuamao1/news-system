@@ -8,6 +8,14 @@ export async function registerRequest(data){
     return $axios.post('/admin/register',data)
 }
 
-export function getMenus(){
-    return $axios.get('/api/getmenulist')
+export async function getModules(){
+    return $axios.get('/api/getmodules')
+}
+
+export async function getUserInfo(){
+    return $axios.get('/api/getuserinfo')
+}
+
+export async function updateUserInfo(data){
+    return $axios.post('/api/updateuserinfo',data)
 }

@@ -3,16 +3,13 @@ import { message} from 'antd';
 import axios from 'axios'
 import Qs from 'qs'
 
-
 const $axios = axios.create({
     baseURL: process.env.REACT_APP_URL,
     timeout: 1000,
-    headers: { 'Authorization': 'Bearer ' + localStorage.token?localStorage.token:'' }
 });
 
 $axios.interceptors.request.use((config)=> {
-    const token=localStorage.getItem('token')
-    config.headers.Authorization='Bearer ' + token
+    config.headers.Authorization='Bearer ' + localStorage.getItem('token')
     return config
   }, function (error) {
     return Promise.reject(error);
@@ -37,7 +34,7 @@ export default {
             url,
             data:Qs.stringify(data),
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             }
         })
     },

@@ -16,3 +16,7 @@ span.anticon.anticon-menu-fold{
     padding: 10px 0;
     border-bottom: 2px solid #eeeeee;
 }
+
+.ant-upload-list.ant-upload-list-text{
+    display: none;
+}

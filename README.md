@@ -17,3 +17,12 @@ axios.[method](url,{data})
 - 查：get
 
 # 表关联
+https://www.cnblogs.com/ymnets/p/3452364.html
+
+
+# 隐藏列表
+```css
+.ant-upload-list.ant-upload-list-text{
+    display: none;
+}
+```
