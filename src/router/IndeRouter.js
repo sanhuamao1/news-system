@@ -14,6 +14,7 @@ import NewsSort from '../views/newsManage/NewsSort'
 import CheckList from '../views/checkManage/CheckList'
 import PublishList from '../views/publishManage/PublishList'
 import Center from '../views/userInfo/Center'
+// import ModulesList from '../views/powerManage/ModulesList'
 export default function IndeRouter() {
   return (
     <HashRouter>
@@ -26,7 +27,8 @@ export default function IndeRouter() {
               <Route path="userinfo/center" element={<Center/>}></Route>
               <Route path="user-manage/list" element={<UserList/>}></Route>
               <Route path="power-manage/roles" element={<PowerList/>}></Route>
-              <Route path="power-manage/characters" element={<CharacterList/>}></Route>       
+              <Route path="power-manage/characters" element={<CharacterList/>}></Route>    
+              {/* <Route path="power-manage/modules" element={<ModulesList/>}></Route>     */}
               <Route path="news-manage/list" element={<NewsList/>}></Route>
               <Route path="news-manage/create" element={<NewsCreate/>}></Route>  
               <Route path="news-manage/sort" element={<NewsSort/>}></Route>   

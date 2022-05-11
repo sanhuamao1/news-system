@@ -48,7 +48,6 @@ export default function center() {
     const res=await updateUserInfo({...value,id:AdminStore.userInfo.id})
     if(res.data.status===200){
       AdminStore.requireUserInfo()
-      console.log(AdminStore.userInfo)
     }
   }
   return (

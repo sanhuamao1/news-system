@@ -17,6 +17,12 @@ export async function aliveUser(params){
     return $axios.get('/api/aliveuser',params)
 }
 
+//添加用户
+export async function addUser(params){
+    return $axios.post('/api/addUser',params)
+}
+
+
 
 
 
