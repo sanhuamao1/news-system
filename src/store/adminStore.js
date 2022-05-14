@@ -1,5 +1,5 @@
 import { observable,configure, runInAction,action } from "mobx"
-import {getModules,getUserInfo,loginRequest} from '../request/admin'
+import {getModulesAndRolesById,getUserInfo,loginRequest} from '../request/admin'
 
 configure({
     enforceAction:'always'
@@ -10,10 +10,10 @@ const AdminStore=observable({
     characterList:["超级管理员","新闻编辑者","新闻审核员","新闻发布者","新闻运营"],
     modules:localStorage.getItem('modules')?JSON.parse(localStorage.getItem('modules')):[],
     userInfo:localStorage.getItem('userinfo')?JSON.parse(localStorage.getItem('userinfo')):'',
-    token:localStorage.getItem('token'),
+    token:localStorage.getItem('token')?localStorage.getItem('token'):'',
 
     async requireModules(){
-        const res=await getModules()
+        const res=await getModulesAndRolesById()
         if(res.data.status===200){
             localStorage.setItem('modules',JSON.stringify(res.data.data)) 
             runInAction(()=>{
@@ -45,7 +45,7 @@ const AdminStore=observable({
 },{
     requireModules:action,
     requireUserInfo:action,
-    requireLogin:action
+    requireLogin:action,
 })
 
 export default AdminStore

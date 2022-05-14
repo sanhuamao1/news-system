@@ -24,7 +24,7 @@ $axios.interceptors.response.use((res)=> {
     return res;
   }, function (error) {
     message.error(error);
-    return Promise.reject(error);
+    return Promise.reject(error);   
 });
 
 export default {

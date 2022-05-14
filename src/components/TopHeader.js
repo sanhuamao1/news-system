@@ -1,19 +1,14 @@
 import React,{ useState,useEffect} from 'react'
 import {AdminStore} from '../store/index';
 import { Layout,Avatar,Dropdown,Menu, Button,Upload ,message } from 'antd';
-import {MenuUnfoldOutlined,MenuFoldOutlined,} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 const {Header}=Layout
 
 
 
 export default function TopHeader() {
-  const [collapsed, setcollapsed] = useState(false);
   const [imageUrl, setimageUrl] = useState('');
   const navigate=useNavigate()
-  const changeCollapsed=()=>{
-    setcollapsed(!collapsed)
-  }
 
   useEffect(() => {
     setimageUrl(AdminStore.userInfo.image_url)
@@ -58,7 +53,6 @@ export default function TopHeader() {
 
   return (
     <Header className="site-layout-background" style={{ padding: 0 }}>
-      {collapsed?<MenuUnfoldOutlined onClick={changeCollapsed}/>:<MenuFoldOutlined onClick={changeCollapsed}/>}
       <span style={{float: 'right',paddingRight: '24px'}}>
         <span style={{paddingRight: '12px'}}>欢迎回来，{AdminStore.userInfo.username}</span>
         <Dropdown overlay={menu}>

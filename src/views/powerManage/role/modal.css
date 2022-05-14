@@ -1,0 +1,7 @@
+.ant-tag {
+    border: 1px dashed;
+}
+.ant-tag.ant-tag-checkable-checked {
+    background-color: #1890ff;
+    border: 1px solid #1890ff;
+}

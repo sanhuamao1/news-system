@@ -1,5 +1,5 @@
 import { Form, Input, Select,Modal} from 'antd';
-import { UserStore} from '../../store/index';
+import { UserStore,AdminStore} from '../../store/index';
 import {addUser} from '../../request/user'
 const AddModalComponent = (props) => {
     const [form]=Form.useForm()
@@ -8,6 +8,7 @@ const AddModalComponent = (props) => {
             addUser(values).then(res=>{
                 if(res.data.status===200){
                     form.resetFields()
+                    props.getList()
                     props.close()
                 }
             })
@@ -49,9 +50,9 @@ const AddModalComponent = (props) => {
                 </Form.Item>
                 <Form.Item label="角色" name="character_id">
                     <Select>
-                        {UserStore.characters?UserStore.characters.map(item=>
+                        { UserStore.characterAddOptions?.map(item=>
                             <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>
-                        ):''}
+                        )}
                     </Select>
                 </Form.Item>
             </Form>

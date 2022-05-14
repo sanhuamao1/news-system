@@ -1,13 +1,13 @@
-import React,{ useEffect,useRef,useState} from 'react'
+import React,{ useEffect,useRef,useState } from 'react'
 import { DeleteFilled ,RedoOutlined } from '@ant-design/icons';
-import { getUserList,aliveUser,deleteUser } from '../../request/user';
-import { Button,Modal,Table} from 'antd';
+import { getUserList,aliveUser,deleteUser,stopUser } from '../../request/user';
+import { Button,Modal,Table,Switch} from 'antd';
 import {AdminStore,UserStore} from '../../store/index';
 import SearchComponent from './SearchComponent';
 import AddModalComponent from './AddModalComponent';
 
 export default function UserList() {
-    const {current:pageSize}=useRef(5)
+    const {current:pageSize}=useRef(8)
     const [userlist, setuserlist] = useState([]); //列表
     const [currentPage, setcurrentPage] = useState(1);//当前页
     const [keyvalue, setkeyvalue] = useState({});//搜索关键词
@@ -32,7 +32,7 @@ export default function UserList() {
         getList({currentPage,pageSize,...keyvalue})
     }, [currentPage,keyvalue]);
 
-    //删除数据
+    //删除用户
     const deleteRow=(id)=>{
         Modal.confirm({
             title: '你确定要删除吗？',
@@ -45,11 +45,15 @@ export default function UserList() {
         });
     }
 
-    //恢复数据
-    const aliveRow=(id)=>{
-        aliveUser({id})
+    const changeState=(checked,id)=>{
+        if(checked){
+            aliveUser({id})
+        }else{
+            stopUser({id})
+        }
         getList({currentPage:1,pageSize})
     }
+
 
     
     //表格
@@ -66,34 +70,39 @@ export default function UserList() {
         {
             title: '邮箱',
             dataIndex: 'email',
+            align:'center',
             render: text => <span>{text?text:"/"}</span>,
         },
         {
             title: '角色',
             dataIndex: 'character_name',
+            align:'center'
         },
         {
             title: '更新时间',
             dataIndex: 'create_time',
+            align:'center',
             render: text => <span>{text.replace("T", ' ').replace(".000Z","")}</span>
         },
         {
             title: '状态',
             dataIndex: 'state',
-            render: text => text? <span>正常</span>:<span style={{color:'#ff4d4f'}}>已停用</span>
+            width:100,
+            align:'center',
+            render:(text,record)=> AdminStore.modules.operations.includes('userState')?
+                    <Switch disabled={record.character_id===1} checkedChildren="正常" unCheckedChildren="已停用" checked={text} onChange={(checked)=>{changeState(checked,record.id)}}/>:
+                    <span>{text?<span>正常</span>:<span style={{color:'red'}}>已停用</span>}</span>
+            
         },
         {
             title: '操作',
             dataIndex: 'state',
+            align:'center',
             render: (text,record) => {
                 if(record.character_id===1){
                     return ''
                 }else {
-                    if(text){
-                        return <Button danger size='small' icon={<DeleteFilled />} onClick={()=>{deleteRow(record.id)}}>删除</Button>
-                    }else{
-                        return <Button style={{color:'#52c41a'}}  size='small' icon={<RedoOutlined />} onClick={()=>{aliveRow(record.id)}}>恢复使用</Button>
-                    }
+                    return <Button danger size='small' icon={<DeleteFilled />} onClick={()=>{deleteRow(record.id)}}>删除</Button>
                 }
             }
         },
@@ -104,6 +113,7 @@ export default function UserList() {
         <AddModalComponent 
             isVisible={isVisible} 
             close={()=>{setIsVisible(false)}} 
+            getList={()=>{getList({currentPage:1,pageSize,...keyvalue})}}
         />
         <SearchComponent 
             addUser={()=>{setIsVisible(true)}} 

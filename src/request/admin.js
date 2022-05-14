@@ -8,8 +8,8 @@ export async function registerRequest(data){
     return $axios.post('/admin/register',data)
 }
 
-export async function getModules(){
-    return $axios.get('/api/getmodules')
+export async function getModulesAndRolesById(){
+    return $axios.get('/api/getmodulesandroles-byid')
 }
 
 export async function getUserInfo(){

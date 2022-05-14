@@ -13,9 +13,11 @@ const SearchComponent=({search,addUser})=>(
         </Form.Item>
         <Form.Item label="角色" name="character_id" style={{width:'220px'}}>
             <Select>
-            {UserStore.characters?[{id:0,name:'全部'},...UserStore.characters].map(item=>
-                <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>
-            ):''}
+                {
+                    UserStore.characterSearchOptions?.map(item=>
+                        <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>
+                    )
+                }
             </Select>
         </Form.Item>
         <Form.Item>
@@ -25,7 +27,7 @@ const SearchComponent=({search,addUser})=>(
             {
                 AdminStore.modules.operations.includes('userAdd')?
                 <Button type="primary" style={{marginLeft:'1em'}} onClick={addUser}>
-                添加用户
+                    添加用户
                 </Button>:''
             }
         </Form.Item>

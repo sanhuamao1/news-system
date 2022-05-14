@@ -35,7 +35,7 @@ export default function SideMenu() {
 
  
   return (
-    <Sider>
+    <Sider className='sider-container'>
       <div className='sider-title'>新闻发布管理系统</div>
       <Menu
         onClick={changeMenu}
@@ -43,6 +43,7 @@ export default function SideMenu() {
         mode="inline"
         defaultSelectedKeys={['4']}
         items={menus}
+        
       />
     </Sider>
   )

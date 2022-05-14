@@ -3,7 +3,7 @@
     background: #fff;
 }
 .ant-layout{
-    height: 100vh;
+    min-height: 100vh;
 }
 span.anticon.anticon-menu-fold{
     padding-left: 24px;
@@ -15,6 +15,20 @@ span.anticon.anticon-menu-fold{
     text-align: center;
     padding: 10px 0;
     border-bottom: 2px solid #eeeeee;
+}
+.sider-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 200px;
+    bottom: 0;
+}
+.ant-layout.ant-layout-has-sider > .ant-layout{
+    margin-left: 200px;
+}
+.sider-container.ant-menu{
+    height: 100%;
+    overflow: auto;
 }
 
 .ant-upload-list.ant-upload-list-text{
