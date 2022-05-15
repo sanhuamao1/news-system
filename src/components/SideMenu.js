@@ -30,7 +30,7 @@ export default function SideMenu() {
   }
 
   useEffect(() => {
-    setmenus(AdminStore.modules.modules.map(item=>getItem(item)))
+    setmenus(AdminStore.modules.menuModules.map(item=>getItem(item)))
   }, []);
 
  

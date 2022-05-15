@@ -1,7 +1,7 @@
 import { Form, Input, Select,Modal} from 'antd';
-import { UserStore,AdminStore} from '../../store/index';
+import { UserStore} from '../../store/index';
 import {addUser} from '../../request/user'
-const AddModalComponent = (props) => {
+const AddModal = (props) => {
     const [form]=Form.useForm()
     const handleSubmit=()=>{
         form.validateFields().then(values => {
@@ -12,9 +12,7 @@ const AddModalComponent = (props) => {
                     props.close()
                 }
             })
-        }).catch(info => {
-            console.log('Validate Failed:', info);
-        });
+        })
     }
     const handleCancel=()=>{
       form.resetFields();
@@ -28,9 +26,9 @@ const AddModalComponent = (props) => {
             onOk={handleSubmit} 
             onCancel={handleCancel}
         >
-            <Form labelCol={{span: 6}} style={{width:'64%',margin:"0 auto"}} form={form} initialValues={{
+            <Form labelCol={{span: 8}} style={{margin:"0 2em"}} form={form} initialValues={{
                 sex:"",
-                id:2
+                character_id:2
             }}>
                 <Form.Item label="用户名" name="username" rules={[{ required: true }]}>
                     <Input/>
@@ -60,4 +58,4 @@ const AddModalComponent = (props) => {
     );
 };
 
-export default AddModalComponent
+export default AddModal

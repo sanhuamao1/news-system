@@ -45,3 +45,32 @@ db.query(baseSQL,[info,character_id],(err,data)=>{}
 
  
 ```
+# 富文本
+- onBlur
+![图 1](images/2022-05-15-%E7%BC%96%E8%BE%91%E5%99%A8.png)  
+https://github.com/facebook/draft-js
+
+- 判断
+![图 2](images/2022-05-15-%E7%BC%96%E8%BE%91%E5%99%A8%E5%86%85%E5%AE%B9%E5%88%A4%E6%96%AD.png)  
+
+- 字段
+![图 4](images/2022-05-15-%E5%AD%97%E6%AE%B5.png)  
+- 加个通知
+- 详情
+![图 5](images/2022-05-15-%E8%AF%A6%E6%83%85.png)  
+
+获取草稿列表，用户与状态过滤出
+1.详情 preview
+2.编辑
+3.删除
+4.提交
+![图 6](images/2022-05-15-%E8%B7%AF%E7%94%B1.png)  
+![图 7](images/2022-05-15-ss.png)  
+
+不放在做别侧边栏的路由---加个字段--对应权限
+![图 8](images/2022-05-15-%E8%B7%B3%E8%BD%AC.png)  
+
+pageheader组件
+根据路由的id获取详情
+![图 9](images/2022-05-15-ww.png)  
+

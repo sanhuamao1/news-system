@@ -9,10 +9,9 @@ import {
     addCharacter,
     updateCharacter
 } from '../../../request/power'
-import './modal.css'
 
 // 一些样式
-const formStyle={width: "70%",margin:"0 auto"}
+const formStyle={margin:"0 4em"}
 const treeStyle={margin:"0 2em"}
 const contentStyle={margin:'2em 0'}
 const footerStyle={textAlign:'right'}
@@ -45,17 +44,13 @@ export default function ModalComponent(props) {
     // 初始化模态框数据
     useEffect(() => {
         if(props.isVisible){
-            PowerStore.requireAllModules()
+            PowerStore.requireAllOpenModules()
         }
-        //新建的 清空数据:
-        //加上isVisible依赖是因为，用户可能多次点击新建，加上isVisible就可以每次打开都重置
-        //如果不加上，由于info没有变化，都是空字符，那么不会进来
         if(props.info===""&&props.isVisible){
             form.resetFields()
             setcheckedModules([])
             setcheckedRoles([])
             setCurrent(0)
-        //编辑的话，只需要传进来的info不是空就可以，重复点击也能保存原来的样子，不用重新赋值
         }else if(props.info!==""){
             const info=JSON.parse(props.info)
             //设置基本信息
@@ -158,7 +153,7 @@ export default function ModalComponent(props) {
                 {
                     current===0&&(
                         <Form 
-                            labelCol={{span: 6}} 
+                            labelCol={{span: 8}} 
                             style={{...formStyle}} 
                             form={form} 
                         >
@@ -176,13 +171,14 @@ export default function ModalComponent(props) {
                 }
                 {
                     current===1&&(
+                        
                         <Tree
                             style={{...treeStyle}}
                             fieldNames={{title:'name',key:'module_id'}}
                             checkStrictly={true}
                             defaultCheckedKeys={checkedModules}
                             checkable
-                            treeData={PowerStore.allModules}
+                            treeData={PowerStore.allOpenModules}
                             onCheck={(keys)=>{
                                 console.log(keys)
                                 setcheckedModules(keys.checked)
@@ -200,6 +196,7 @@ export default function ModalComponent(props) {
                                         item.roles.map(role=>{
                                             return (
                                                 <Tag.CheckableTag
+                                                    className='editTag'
                                                     key={role.role_id}
                                                     checked={checkedRoles.indexOf(role.role_id) > -1}
                                                     onChange={checked => roleChecked(role.role_id, checked)}

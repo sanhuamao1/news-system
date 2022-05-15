@@ -1,8 +1,6 @@
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useState,useRef} from 'react'
 import {AdminStore} from '../../../store'
 import { 
-    StopOutlined,
-    RedoOutlined,
     ExclamationCircleOutlined,
     EditOutlined,
     DeleteFilled
@@ -17,28 +15,33 @@ import {
 } from '../../../request/power'
 import ModalComponent from './ModalComponent';
 
-export default function RoleList() {
+export default function CharacterList() {
     const [charactersList, setcharactersList] = useState([]);//角色列表
     const [isVisible, setisVisible] = useState(false);//模态框
     const [editInfo, seteditInfo] = useState("");
+    //分页
+    const {current:pageSize}=useRef(5)
+    const [currentPage, setcurrentPage] = useState(1)
+    const [total, settotal] = useState(0);
 
-    const getCharactersList=()=>{
-        getCharacters().then(res=>{
+    const getCharactersList=(params)=>{
+        getCharacters(params).then(res=>{
             if(res.data.status===200){
                 setcharactersList(res.data.data)
+                if(total!==res.data.total){settotal(res.data.total)}
             }
         })
     }
     //初始化
     useEffect(() => {
-        getCharactersList()
-    }, []);
+        getCharactersList({currentPage,pageSize})
+    }, [currentPage]);
     
     const changeState=async(checked,id)=>{
         let res
         if(checked){
             res=await aliveCharacter({id})
-            getCharactersList()
+            getCharactersList({currentPage,pageSize})
         }else{
             Modal.confirm({
                 title: '确定要停用吗？',
@@ -48,26 +51,10 @@ export default function RoleList() {
                 okText:'确定',
                 async onOk() {
                     res=await stopCharacter({id})
-                    getCharactersList()
+                    getCharactersList({currentPage,pageSize})
                 },
             });
         }
-    }
-    //停用角色
-    const stopRow=(character_id)=>{
-        Modal.confirm({
-            title: '你确定要停用吗？',
-            icon: <ExclamationCircleOutlined />,
-            content:'停用后，该角色的模块和权限不会清空；属于该角色的所有用户都会被归为游客',
-            cancelText:'取消',
-            okText:'确定',
-            async onOk() {
-                const res=await stopCharacter({character_id})
-                if(res.data.status===200){
-                    getCharactersList()
-                }
-            },
-        });
     }
 
     const deleteRow=async(id)=>{
@@ -80,17 +67,10 @@ export default function RoleList() {
             async onOk() {
                 const res=await deleteCharacter({id})
                 if(res.data.status===200){
-                    getCharactersList()
+                    getCharactersList({currentPage:1,pageSize})
                 }
             },
         });
-    }
-    //恢复角色
-    const aliveRow=async (character_id)=>{
-        const res=await aliveCharacter({character_id})
-        if(res.data.status===200){
-            getCharactersList()
-        }
     }
 
     //编辑角色
@@ -177,7 +157,7 @@ export default function RoleList() {
                 AdminStore.modules.operations.includes('characterAdd')?
                 <Button 
                     type='primary' 
-                    style={{marginBottom:'1em',float:'left'}} 
+                    style={{marginBottom:'1em',float:'right'}} 
                     onClick={()=>{
                         seteditInfo("")//传入空字符，表示为为新建
                         setisVisible(true)
@@ -190,7 +170,7 @@ export default function RoleList() {
                     setisVisible(false)
                     // 当提交成功后，传过来ok，提醒这边重新获取列表
                     if(v==='ok'){
-                        getCharactersList()
+                        getCharactersList({currentPage:1,pageSize})
                     }
                 }}
            />
@@ -198,7 +178,12 @@ export default function RoleList() {
                 rowKey={item=>item.id}
                 columns={AdminStore.modules.operations.some(item=>item==='characterDelete'||item==='characterUpdate')?columns:columns.slice(0,4)} 
                 dataSource={charactersList?charactersList:[]} 
-                pagination={false}
+                pagination={{
+                    pageSize,
+                    current:currentPage,
+                    total,
+                    onChange:(value)=>{setcurrentPage(value)}
+                }}
             />
             
         </div>

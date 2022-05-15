@@ -15,7 +15,7 @@ const SearchComponent=({search,addUser})=>(
             <Select>
                 {
                     UserStore.characterSearchOptions?.map(item=>
-                        <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>
+                        <Select.Option value={item.id} key={item.name}>{item.name}</Select.Option>
                     )
                 }
             </Select>
