@@ -64,7 +64,7 @@ export default function RoleList() {
             <Table
                 rowKey={item=>item.id}
                 columns={columns}
-                dataSource={characterList}
+                dataSource={characterList?characterList:[]}
                 pagination={false}
             />
         </div>

@@ -8,12 +8,12 @@ const { Sider } = Layout
 
 //添加图标
 const iconList={
-  "/home":<HomeOutlined />,
-  "/user-manage/list":<TeamOutlined />,
-  "/power-manage":<ToolOutlined />,
-  "/news-manage":<ProfileOutlined />,
-  "/check-manage/list":<FileSearchOutlined />,
-  "/publish-manage":<UploadOutlined/>
+  "home":<HomeOutlined />,
+  "user-manage/list":<TeamOutlined />,
+  "power-manage":<ToolOutlined />,
+  "news-manage":<ProfileOutlined />,
+  "check-manage/list":<FileSearchOutlined />,
+  "publish-manage":<UploadOutlined/>
 }
 function getItem(item){
   return{

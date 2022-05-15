@@ -134,7 +134,7 @@ export default function CharacterList() {
             dataIndex: 'state',
             align:'center',
             render: (text,record) => {
-                if(record.id===1||record.id===6){ //不删除超级管理员和游客
+                if((record.id===1||record.id===6)&&AdminStore.userInfo.character_id!==1){ //不删除超级管理员和游客
                     return '/'
                 }else {
                     return <span>   

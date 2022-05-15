@@ -46,16 +46,10 @@ db.query(baseSQL,[info,character_id],(err,data)=>{}
  
 ```
 # 富文本
-- onBlur
-![图 1](images/2022-05-15-%E7%BC%96%E8%BE%91%E5%99%A8.png)  
-https://github.com/facebook/draft-js
+https://github.com/margox/braft-editor
+https://github.com/sstur/react-rte
 
-- 判断
-![图 2](images/2022-05-15-%E7%BC%96%E8%BE%91%E5%99%A8%E5%86%85%E5%AE%B9%E5%88%A4%E6%96%AD.png)  
 
-- 字段
-![图 4](images/2022-05-15-%E5%AD%97%E6%AE%B5.png)  
-- 加个通知
 - 详情
 ![图 5](images/2022-05-15-%E8%AF%A6%E6%83%85.png)  
 
@@ -73,4 +67,5 @@ https://github.com/facebook/draft-js
 pageheader组件
 根据路由的id获取详情
 ![图 9](images/2022-05-15-ww.png)  
-
+- 路径别名
+![图 10](images/2022-05-15-%E5%88%AB%E5%90%8D.png)  

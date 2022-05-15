@@ -1,5 +1,5 @@
 import React ,{useEffect,useState} from 'react'
-import { PowerStore } from '../../../store';
+import { AdminStore, PowerStore } from '../../../store';
 import { Steps,Form, Input,Modal,Tree,Button,message,Tag,Empty  } from 'antd';
 import { ReconciliationOutlined,PartitionOutlined,KeyOutlined} from '@ant-design/icons';
 import {
@@ -124,6 +124,7 @@ export default function ModalComponent(props) {
         }
         
         if(res.data.status===200){
+            AdminStore.requireModules()
             props.close('ok')
         }
     }

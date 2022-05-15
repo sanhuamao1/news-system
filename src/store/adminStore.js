@@ -38,8 +38,9 @@ const AdminStore=observable({
             localStorage.setItem('token',res.data.token)
             this.token=res.data.token
         }  
-        await this.requireModules()
+        const data=await this.requireModules()
         await this.requireUserInfo()
+        console.log(data)
         window.location.href = '/#/home';
     }
 },{

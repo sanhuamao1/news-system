@@ -1,7 +1,7 @@
 import React,{ useEffect,useRef,useState } from 'react'
 import { DeleteFilled ,EditOutlined } from '@ant-design/icons';
 import { getUserList,aliveUser,deleteUser,stopUser } from '../../request/user';
-import { Button,Modal,Table,Switch} from 'antd';
+import { Button,Modal,Table,Switch,Tooltip} from 'antd';
 import {AdminStore,UserStore} from '../../store/index';
 import SearchComponent from './SearchComponent';
 import AddModal from './AddModal';
@@ -129,10 +129,14 @@ export default function UserList() {
                 }else {
                     return <span>   
                        {
-                            AdminStore.modules.operations.map(item=>{
-                                if(item==='userDelete'){return <Button danger size='small' icon={<DeleteFilled />} style={{marginRight:'1em'}} onClick={()=>{deleteRow(record.id)}}>删除</Button>}
-                                if(item==='userUpdate'){return <Button type='primary' size='small' icon={<EditOutlined />} onClick={()=>{editRow(record)}}>更改角色</Button>}
-                            })
+                             AdminStore.modules.operations.find(item=>item==='userUpdate')&&<Tooltip title="更改角色">
+                                <Button shape="circle" type='primary' icon={<EditOutlined />} onClick={()=>{editRow(record)}} style={{marginRight:'1em'}}/>
+                            </Tooltip>
+                       }
+                       {
+                            AdminStore.modules.operations.find(item=>item==='userDelete')&&<Tooltip title="删除">
+                                <Button shape="circle" danger icon={<DeleteFilled />} onClick={()=>{deleteRow(record.id)}} style={{marginRight:'1em'}}/>
+                            </Tooltip>
                        }
                     </span>
                 }
@@ -164,7 +168,7 @@ export default function UserList() {
         <Table 
             rowKey={item=>item.id}
             columns={AdminStore.modules.operations.some(item=>item==='userDelete'||item==='userUpdate')?columns:columns.slice(0,6)} 
-            dataSource={userlist} 
+            dataSource={userlist.length!==0?userlist:[]} 
             pagination={{
                 pageSize,
                 current:currentPage,
