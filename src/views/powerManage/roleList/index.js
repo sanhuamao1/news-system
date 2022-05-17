@@ -2,6 +2,12 @@ import React,{useEffect,useState} from 'react'
 import { Table, Tag,Switch} from 'antd';
 import {AdminStore} from '../../../store'
 import {getAllModulesAndRoles,stopModule,aliveModule} from '../../../request/power'
+import { EyeTwoTone, EyeInvisibleTwoTone} from '@ant-design/icons';
+
+const fontSize={
+    fontSize:'16px'
+}
+
 export default function RoleList() {
     const [characterList, setcharacterList] = useState([]);
     useEffect(() => {
@@ -28,26 +34,30 @@ export default function RoleList() {
         {
           title: '模块名称',
           dataIndex: 'name',
-          key: 'name',
-          width: '14%',
+          width: '18%',
+
         },
         {
           title: '路由路径',
           dataIndex: 'key',
-          key: 'key',
-          width: '12%',
+          width: '24%',
           render:(text)=><Tag color="#53A7CA">{text}</Tag>
         },
         {
             title: '操作权限',
             dataIndex: 'roles',
-            key: 'roles',
+            width:'24%',
             render:(roles)=>roles!==undefined?roles.map(role=><Tag color="#8CC5DD">{role.name}</Tag>):''
+        },
+        {
+            title: '是否可见',
+            dataIndex: 'menu',
+            render:(text)=>text?< EyeTwoTone style={{...fontSize}}/>:<EyeInvisibleTwoTone twoToneColor="red" style={{...fontSize}}/>,
+            align:'center'
         },
         {
           title: '状态',
           dataIndex: 'state',
-          key: 'state',
           align:'center',
           render: (text,record) => AdminStore.modules.operations.includes('moduleUpdate')?
                     <Switch 

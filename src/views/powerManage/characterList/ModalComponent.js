@@ -89,7 +89,6 @@ export default function ModalComponent(props) {
                 return
             }
             //验证成功了，请求数据
-            console.log('checkedModules',checkedModules)
             let moduleStr=checkedModules.join(',')
             const res=await getRolesByModule({moduleStr})
             if(res.data.status!==200) return
@@ -172,7 +171,6 @@ export default function ModalComponent(props) {
                 }
                 {
                     current===1&&(
-                        
                         <Tree
                             style={{...treeStyle}}
                             fieldNames={{title:'name',key:'module_id'}}
@@ -181,7 +179,6 @@ export default function ModalComponent(props) {
                             checkable
                             treeData={PowerStore.allOpenModules}
                             onCheck={(keys)=>{
-                                console.log(keys)
                                 setcheckedModules(keys.checked)
                             }}
                         />

@@ -12,12 +12,16 @@ const AdminStore=observable({
     userInfo:localStorage.getItem('userinfo')?JSON.parse(localStorage.getItem('userinfo')):'',
     token:localStorage.getItem('token')?localStorage.getItem('token'):'',
 
-    async requireModules(){
+    async requireModules(type){
         const res=await getModulesAndRolesById()
         if(res.data.status===200){
             localStorage.setItem('modules',JSON.stringify(res.data.data)) 
             runInAction(()=>{
                 this.modules=res.data.data
+                if(type==='login'){
+                    window.location.href = '/#/home'
+                }
+                
             })
         }
     },
@@ -28,6 +32,7 @@ const AdminStore=observable({
             localStorage.setItem('userinfo',JSON.stringify(res.data.data)) 
             runInAction(()=>{
                 this.userInfo=JSON.parse(JSON.stringify(res.data.data))
+                
             })
         }
     },
@@ -38,10 +43,8 @@ const AdminStore=observable({
             localStorage.setItem('token',res.data.token)
             this.token=res.data.token
         }  
-        const data=await this.requireModules()
         await this.requireUserInfo()
-        console.log(data)
-        window.location.href = '/#/home';
+        await this.requireModules('login')
     }
 },{
     requireModules:action,

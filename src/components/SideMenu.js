@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from 'react'
 import {AdminStore} from '../store/index';
 import { Layout, Menu } from 'antd';
-import { HomeOutlined, TeamOutlined, ToolOutlined, ProfileOutlined, FileSearchOutlined, UploadOutlined } from '@ant-design/icons';
+import { HomeOutlined, TeamOutlined, ToolOutlined, ProfileOutlined, FileSearchOutlined, UploadOutlined,FileDoneOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 const { Sider } = Layout
 
@@ -13,7 +13,8 @@ const iconList={
   "power-manage":<ToolOutlined />,
   "news-manage":<ProfileOutlined />,
   "check-manage/list":<FileSearchOutlined />,
-  "publish-manage":<UploadOutlined/>
+  "publish-manage":<UploadOutlined/>,
+  "check-manage":<FileDoneOutlined/>,
 }
 function getItem(item){
   return{

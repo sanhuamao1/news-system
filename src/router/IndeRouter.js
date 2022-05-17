@@ -10,13 +10,13 @@ import UserList from '../views/userManage/UserList'
 import CharacterList from '../views/powerManage/characterList'
 import RoleList from '../views/powerManage/roleList'
 import DraftEdit from '../views/newsManage/DraftEdit'
-import NewsList from '../views/newsManage/NewsList'
 import DratfList from '../views/newsManage/DratfList'
 import NewsSort from '../views/newsManage/NewsSort'
 import CheckList from '../views/checkManage/CheckList'
 import PublishList from '../views/publishManage/PublishList'
 import PreView from '../views/newsManage/PreView';
 import Center from '../views/userInfo/Center'
+import CheckManage from '../views/checkManage/CheckManage'
 
 const pathRouterMap={
   "home":<Home/>,
@@ -25,14 +25,15 @@ const pathRouterMap={
   "power-manage/characterlist":<CharacterList/>,
   "power-manage/rolelist":<RoleList/>,
   "news-manage":<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无可操作模块"/>,
-  "news-manage/list":<NewsList/>,
   "news-manage/createdraft":<DraftEdit/>,
   "news-manage/sort":<NewsSort/>,
   "news-manage/draft":<DratfList/>,
   "news-manage/draft/:id":<DraftEdit/>,
-  "news-manage/preview":<PreView/>,
+  "news-manage/preview/:id":<PreView/>,
+  "check-manage":<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无可操作模块"/>,
   "check-manage/list":<CheckList/>,
-  "publish-manage":<PublishList/>,
+  "check-manage/check":<CheckManage/>,
+  "publish-manage":<PublishList/>
 }
 
 export default function IndeRouter() {
@@ -51,6 +52,7 @@ export default function IndeRouter() {
               }
             </Route>
             <Route path="/login" element={<Login/>} key="/login"></Route>
+            <Route path="*" element={<NotFound/>} key="/notfound"></Route>
         </Routes>
     </HashRouter>
   )

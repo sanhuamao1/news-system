@@ -13,6 +13,7 @@
     "http-proxy-middleware": "^2.0.6",
     "mobx": "^6.5.0",
     "mobx-react": "^7.4.0",
+    "moment": "^2.29.3",
     "nprogress": "^0.2.0",
     "qs": "^6.10.3",
     "react": "^18.1.0",
