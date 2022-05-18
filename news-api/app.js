@@ -1,14 +1,20 @@
 const express=require('express')
 const app=express()
 const port=8080
-app.use(express.urlencoded({ extended: false }))
+
+//解析请求体
+app.use(express.urlencoded({ extended: false })) 
 app.use(express.json())
+
+//允许跨域
 const cors=require('cors')
 app.use(cors())
+
+//设置图片上传路径
 app.use('/uploads', express.static('./uploads'))
 
 
-// msg中间件
+// 自定义msg中间件
 const {okmw,errmw}=require('./utils/msg')
 app.use(okmw)
 app.use(errmw)
@@ -32,8 +38,6 @@ app.use(admin)
 app.use('/api',user)
 app.use('/api',power)
 app.use('/api',news)
-
-
 
 
 // 错误全局拦截

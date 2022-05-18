@@ -1,7 +1,5 @@
 const db=require('../db')
 
-
-
 //values可以是对象，可以是字符串
 function query(sql,values,response){
     let res=response

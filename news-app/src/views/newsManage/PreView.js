@@ -2,7 +2,7 @@ import React,{useState,useEffect, useRef} from 'react'
 import { useParams } from 'react-router-dom';
 import {getNewsDetail} from '@/request/news'
 import { PageHeader, Tag, Descriptions } from 'antd';
-import {NewsStore} from '@/store'
+import NewsStore from '@/tstore/newsStore';
 
 export default function PreView() {
     const [newsInfo, setNewsInfo] = useState({});

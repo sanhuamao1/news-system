@@ -1,7 +1,7 @@
 import React,{useState,useEffect,useRef} from 'react'
 import {getCheckListForManager,agreeCheck,opposeCheck} from '@/request/news'
 import {Table,Tag,Tooltip,Input,Modal,Form  } from 'antd';
-import { NewsStore} from '@/store';
+import NewsStore from '@/tstore/newsStore';
 import { CheckCircleFilled,CloseCircleFilled} from '@ant-design/icons';
 
 
