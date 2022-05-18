@@ -12,7 +12,7 @@
     node app.js
     ```
 - mydb：数据库
-
+    ![图 4](images/mysql.png)  
 
 
 
@@ -20,10 +20,10 @@
 - 富文本：https://github.com/sstur/react-rte
 - mobx：https://mobx-react.js.org/observer-component
 
-
+## 其他乱七八糟
 
 ![图 1](images/2022-05-17-%E8%87%AA%E5%AE%9A%E4%B9%89%E9%92%A9%E5%AD%90.png)  
 ![图 4](images/2022-05-17-%E5%87%BD%E6%95%B0.png)  
 ![图 5](images/2022-05-17-%E4%BC%A0%E5%80%BC.png)  
 ![图 7](images/2022-05-17-dd.png)  
-![图 1](images/2022-05-18-ss.png)  
+
