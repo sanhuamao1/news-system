@@ -1,0 +1,33 @@
+@import '~antd/dist/antd.css';
+.site-layout .site-layout-background {
+    background: #fff;
+}
+.ant-layout{
+    min-height: 100vh;
+}
+span.anticon.anticon-menu-fold{
+    padding-left: 24px;
+}
+
+
+.sider-container.ant-menu{
+    height: 100%;
+    overflow: auto;
+}
+
+.ant-upload-list.ant-upload-list-text{
+    display: none;
+}
+
+.ant-modal-content{
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.editTag.ant-tag {
+    border: 1px dashed;
+}
+.editTag.ant-tag.ant-tag-checkable-checked {
+    background-color: #1890ff;
+    border: 1px solid #1890ff;
+}
