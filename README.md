@@ -30,6 +30,295 @@
 - utils：一些杂乱的封装
 - db：mysql模块
 
+## 前端部分
+### 01 实现富文本
+```bash
+npm i react-rte
+```
+> https://github.com/sstur/react-rte
+1. 通过`RichTextEditor.createEmptyValue()`初始化空对象
+2. 如果初始化有内容（html格式），通过`RichTextEditor.createValueFromString(props.content, 'html')`进行重新赋值
+3. 一旦失去焦点`onBlur`，调用父组件属性函数`done`并把对象转为html格式传给父组件
+```jsx
+// src/view/newsManage/EditBox.js
+import React,{useState,useEffect} from 'react'
+import RichTextEditor from 'react-rte';
+export default function EditBox(props) {
+    const [editorState, setEditorState] = useState(RichTextEditor.createEmptyValue());
+    useEffect(() => {
+        if(props.content!==""){
+            setEditorState(RichTextEditor.createValueFromString(props.content, 'html'))
+        }else{
+            setEditorState(RichTextEditor.createEmptyValue())
+        }
+    }, [props.content]);
+    return (
+        <div>
+            <RichTextEditor
+                value={editorState}
+                placeholder="请输入内容..."
+                onChange={(editorState)=>{setEditorState(editorState)}}
+                onBlur={()=>{props.done(editorState.toString('html'))}}
+            />
+        </div>
+    )
+}
+```
+```jsx
+<EditBox done={(values)=>{setContent(values)}} content={content}/>
+```
+### 02 动态路由
+1. 通过（冒号+参数）的形式表明为动态路由
+```jsx
+<Route path="news-manage/preview/:id" ...></Route>
+```
+2. 实现跳转
+```jsx
+<a href={`#/news-manage/preview/${id}`}>{text}</a>
+```
+```jsx
+const navigate = useNavigate()
+navigate(`/news-manage/preview/${id}`)
+```
+
+### 03 axios封装
+```js
+// src/request/index.js
+
+import { message} from 'antd';
+import axios from 'axios'
+import Qs from 'qs'
+import AdminStore from '@/tstore/adminStore'  //mobx
+
+const $axios = axios.create({
+    baseURL: process.env.REACT_APP_URL,
+    timeout: 1000,
+});
+
+//请求拦截器
+$axios.interceptors.request.use((config)=> {
+    config.headers.Authorization='Bearer ' + localStorage.getItem('token') //每个请求带上token
+    return config
+  }, function (error) {
+    return Promise.reject(error);
+});
+
+//响应拦截器
+$axios.interceptors.response.use((res)=> {
+    if(res.data.status===200&&res.data.msg!=='ok'){
+        message.success(res.data.msg)
+    }else if(res.data.status!==200){  
+        if(res.data.msg==='身份认证失败！'){
+            window.location.href='/#/login'
+        }else{
+            message.error(res.data.msg)
+        }
+    }
+    return res;
+  }, function (error) {
+    message.error(error);
+    return Promise.reject(error);   
+});
+
+export default {
+    post(url,data){
+        return $axios({
+            method:'post',
+            url,
+            data:Qs.stringify(data),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            }
+        })
+    },
+    get(url,params){
+        return $axios({
+            method:'get',
+            url,
+            params
+        })
+    }
+}
+```
+1. 为每个模块写好请求
+
+```js
+// src/request/news.js
+
+import $axios from './index';
+
+// 新闻类别
+export async function getNewsSort(){
+    return $axios.get('/api/getnewssort')
+}
+// 草稿箱列表
+export async function getDraftList(params){
+    return $axios.get('/api/getDraftList',params)
+}
+
+// 新建草稿
+export async function createNews(data){
+    return $axios.post('/api/createnews',data)
+}
+```
+2. 导入到对应页面使用
+```js
+import {getNewsSort,getDraftList,createNews} from '@/request/news'
+```
+
+### 03 mobx持久化与响应式
+```bash
+npm i mobx mobx-react
+```
+
+**1. 持久化**
+
+下面是登陆的时候保存用户token，用户信息，用户可操作性模块和权限的。localstorage不允许存储对象数组类型，需要通过`JSON.stringify`先转化为JSON字符后再保存，当localstorage有对应数据是，再通过`JSON.parse`存储到mobx中
+
+```js
+// \src\tstore\adminStore.js
+import { observable,configure, runInAction } from "mobx"
+import {getModulesAndRolesById,getUserInfo,loginRequest } from '@/request/admin'
+
+const AdminStore=observable({
+    modules:localStorage.getItem('modules')?JSON.parse(localStorage.getItem('modules')):[],
+    userInfo:localStorage.getItem('userinfo')?JSON.parse(localStorage.getItem('userinfo')):'',
+    token:localStorage.getItem('token')?localStorage.getItem('token'):'',
+
+    // 登陆时调用这个
+    async requireLogin(value){
+        // 01 获取token
+        const res=await loginRequest(value)
+        if(res.data.status===200){
+            localStorage.setItem('token',res.data.token)
+            this.token=res.data.token
+        }  
+
+        // 02 获取用户信息
+        await this.requireUserInfo()
+        // 03 获取可操作模块和权限
+        // 因为登陆和管理模块中都需要调用这个方法，而登陆需要调整，管理模块不需要，故加上一个参数用于区分
+        await this.requireModules('login') 
+    }
+
+    // 这里保存了两份，目的是1.用户重新进来的时候可以直接通过localstorage的数据进行模块渲染；2.在其他需要数据的地方直接通过mobx获取数据而不用转换为对象
+    async requireModules(type){
+        const res=await getModulesAndRolesById()
+        if(res.data.status===200){
+            localStorage.setItem('modules',JSON.stringify(res.data.data)) 
+            runInAction(()=>{
+                this.modules=res.data.data
+                if(type==='login'){
+                    window.location.href = '/#/home'
+                }
+            })
+        }
+    },
+
+    async requireUserInfo(){
+        const res=await getUserInfo()
+        if(res.data.status===200){
+            localStorage.setItem('userinfo',JSON.stringify(res.data.data)) 
+            runInAction(()=>{
+                this.userInfo=JSON.parse(JSON.stringify(res.data.data))
+            })
+        }
+    },
+})
+export default AdminStore
+```
+调用
+```js
+import AdminStore from '@/tstore/adminStore'
+AdminStore.requireLogin(value) 
+```
+---
+
+**2. 响应式**
+
+> https://mobx-react.js.org/observer-component
+
+本项目的组件都是函数式组件。下面以展开和收起菜单为演示：
+
+1.定义可观察对象
+```js
+// \src\tstore\adminStore.js
+import { observable } from "mobx"
+const AdminStore=observable({
+    collapse:false,
+    setCollapse(){
+        this.collapse=!this.collapse
+    }
+})
+export default AdminStore
+```
+2.导入可观察对象
+```jsx
+// src\components\TopHeader.js
+
+import AdminStore from '@/tstore/adminStore'
+```
+3.通过observer将组件变为可观察,即用`observer()`包裹函数式组件
+```jsx
+// src\components\TopHeader.js
+
+import { observer } from 'mobx-react';
+export default observer(()=>{
+    //...
+
+    return(
+        //...
+    )
+})
+```
+4.使用可观察对象提供的属性和方法
+```jsx
+<span 
+    style={{float:'left',cursor:'pointer',fontSize:'20px'}} 
+    onClick={()=>{AdminStore.setCollapse()}}>
+    {
+        AdminStore.collapse?<MenuUnfoldOutlined/>:<MenuFoldOutlined/>
+    }
+</span>
+```
+---
+另外也有钩子写法，如果状态结构不是很复杂，单个页面不需要使用多个模块的状态，可以不用。但是写法比较有趣，还是去用了下。
+
+1. 给可观察对象创建上下文环境
+```js
+// \src\tstore\contexts.js
+
+import React from 'react'
+import UserStore from './userStore'
+import AdminStore from './adminStore'
+import PowerStore from './powerStore' 
+
+export const storesContext = React.createContext({
+    UserStore,
+    AdminStore,
+    PowerStore
+})
+```
+2. 使用上下文环境
+```js
+// src\tstore\useStores.js
+import React from 'react'
+import { storesContext } from './contexts' //导入上下文环境
+
+export const useStores = () => React.useContext(storesContext)
+```
+3. 在页面中使用
+```js
+import { observer } from 'mobx-react';
+import { useStores } from '@/tstore/useStores'
+export default observer(()=>{
+    const {UserStore,PowerStore}=useStores()  //想要哪个模块的数据就解构哪个
+
+    return(
+        //...
+    )
+})
+```
 ## 后端部分
 ### 01 mysql的query封装
 
@@ -76,6 +365,7 @@ function queryT(sql,values,response){
     })
 }
 ```
+
 ### 02 分页处理封装
 如果业务只有一个需要进行分页和查询，那么没必要封装。其实一直在想能不能只通过一条语句同时获取总条数和当前页的数据，但没想出来。
 ```js
@@ -270,9 +560,7 @@ exports.splitAddAndDelete=(oldStr,newStr)=>{
 
 
 
-## 其他参考
-- 富文本：https://github.com/sstur/react-rte
-- mobx：https://mobx-react.js.org/observer-component
+
 
 ## 其他乱七八糟
 
