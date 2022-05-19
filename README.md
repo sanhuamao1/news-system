@@ -1,7 +1,7 @@
 
 # 引言
 
-本项目是跟着[b站一个视频做的新闻管理系统](https://www.bilibili.com/video/BV1dP4y1c7qd?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click)，原视频没有做后端部分。我在此基础上自己构建了数据库，写了接口服务，同时对原本的页面展示进行了部分修改。[项目的所有源码都在github中](https://github.com/sanhuamao1/news-system)。
+本项目是跟着[b站一个视频做的新闻管理系统](https://www.bilibili.com/video/BV1dP4y1c7qd?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click)，原视频没有做后端部分。我在此基础上自己构建了数据库，写了接口服务，同时对原本的页面展示进行了部分修改。另外，原视频用的是redux管理状态，本项目用的是mobx。[项目的所有源码都在github中](https://github.com/sanhuamao1/news-system)。
 
 
 
