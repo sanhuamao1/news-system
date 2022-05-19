@@ -77,6 +77,8 @@ export default function EditBox(props) {
         </div>
     )
 }
+```
+```jsx
 <EditBox done={(values)=>{setContent(values)}} content={content}/>
 ```
 ## 3.2 动态路由
