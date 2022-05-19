@@ -1,28 +1,40 @@
-# news-system
-## 项目组成
+
+# 引言
+
+本项目是跟着[b站一个视频做的新闻管理系统](https://www.bilibili.com/video/BV1dP4y1c7qd?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click)，原视频没有做后端部分。我在此基础上自己构建了数据库，写了接口服务，同时对原本的页面展示进行了部分修改。[项目的所有源码都在github中](https://github.com/sanhuamao1/news-system)。
+
+
+
+# 一 项目组成
+
 - news-app：前端
     ```
     npm i
     npm start
     ```
-    > 还需要在node_modules里面配置一下别名![图 10](images/2022-05-15-%E5%88%AB%E5%90%8D.png)  
+    > 还需要在node_modules里面配置一下别名<img src="https://s2.loli.net/2022/05/19/Skzmf6DLa3UYHht.png" alt="2022-05-15-别名" style="zoom:67%;" />
+    >
+    > 
 - news-api：后端
     ```
     npm i
     node app.js
     ```
 - mydb：数据库
-    ![图 4](images/mysql.png)  
+    ![mysql](https://s2.loli.net/2022/05/19/Z5nS2AKjkqY1ORi.png)
 
-## 文件结构
-### 前端
+# 二 文件结构
+
+## 前端结构
+
 - components：组件
 - request：各个模块的请求
 - router：路由
 - tstore：状态管理
 - view：视图
 
-### 后端
+## 后端结构
+
 - router：路由挂载
 - router-handler：路由处理函数
 - schema：请求体验证规则
@@ -30,8 +42,10 @@
 - utils：一些杂乱的封装
 - db：mysql模块
 
-## 前端部分
-### 01 实现富文本
+# 三 前端要点记录
+
+## 3.1 实现富文本
+
 ```bash
 npm i react-rte
 ```
@@ -63,11 +77,10 @@ export default function EditBox(props) {
         </div>
     )
 }
-```
-```jsx
 <EditBox done={(values)=>{setContent(values)}} content={content}/>
 ```
-### 02 动态路由
+## 3.2 动态路由
+
 1. 通过（冒号+参数）的形式表明为动态路由
 ```jsx
 <Route path="news-manage/preview/:id" ...></Route>
@@ -75,13 +88,11 @@ export default function EditBox(props) {
 2. 实现跳转
 ```jsx
 <a href={`#/news-manage/preview/${id}`}>{text}</a>
-```
-```jsx
 const navigate = useNavigate()
 navigate(`/news-manage/preview/${id}`)
 ```
+## 3.3 axios封装
 
-### 03 axios封装
 ```js
 // src/request/index.js
 
@@ -166,12 +177,15 @@ export async function createNews(data){
 import {getNewsSort,getDraftList,createNews} from '@/request/news'
 ```
 
-### 03 mobx持久化与响应式
+## 3.4 mobx状态管理
+
 ```bash
 npm i mobx mobx-react
 ```
 
-**1. 持久化**
+---
+
+### 1.持久化
 
 下面是登陆的时候保存用户token，用户信息，用户可操作性模块和权限的。localstorage不允许存储对象数组类型，需要通过`JSON.stringify`先转化为JSON字符后再保存，当localstorage有对应数据是，再通过`JSON.parse`存储到mobx中
 
@@ -232,9 +246,7 @@ export default AdminStore
 import AdminStore from '@/tstore/adminStore'
 AdminStore.requireLogin(value) 
 ```
----
-
-**2. 响应式**
+### 2. 响应式
 
 > https://mobx-react.js.org/observer-component
 
@@ -319,8 +331,9 @@ export default observer(()=>{
     )
 })
 ```
-## 后端部分
-### 01 mysql的query封装
+# 四后端要点记录
+
+## 4.1 mysql的query
 
 一开始写的时候觉得没什么，后面越写嵌套越深，深感不对劲，特别是在处理事务的时候，非常难搞，于是去封装了一下
 ```js
@@ -366,7 +379,8 @@ function queryT(sql,values,response){
 }
 ```
 
-### 02 分页处理封装
+## 4.2 分页处理
+
 如果业务只有一个需要进行分页和查询，那么没必要封装。其实一直在想能不能只通过一条语句同时获取总条数和当前页的数据，但没想出来。
 ```js
 // util/sqlhandler.js
@@ -442,7 +456,8 @@ exports.sqlCount=(table,query,currentPageKey='currentPage',pageSizeKey='pageSize
     return `select count('id') as total from ${table} ${arr.length>0?'where '+arr.join(" and "):''}`
 }
 ```
-### 03 一对多批量插入封装
+## 4.3 一对多批量插入
+
 有一个业务是给角色添加多可模块，如果单纯的用拼接用些困难，于是封装了以下。如果有其他处理方法还请评论！
 ```js
 // util/sqlhandler.js
@@ -467,7 +482,8 @@ exports.OneToManyInsert=(tableName,parentKey,childrenKey,parentValue,childrenVal
     return base+valueArr.join(",")
 }
 ```
-## 04 生成树
+## 4.4 生成树
+
 1. 传入双数组生成父子树
 
 场景：分别有模块表和权限表（打平），而权限是对应于又对应于一个模块，所以想通过它们的对应关系，把权限插入到对应模块中
@@ -522,7 +538,8 @@ exports.NodesToTree=(Nodes,selfKey,parentKey,parentTopValue)=>{
     return parentArr
 }
 ```
-### 05 过滤出新增与删除的部分
+## 4.5 过滤出新增与删除的部分
+
 ```js
 /*
     作用：输入旧的和新的字符，处理出在旧数据的基础上删除的部分和新增的部分
@@ -557,6 +574,7 @@ exports.splitAddAndDelete=(oldStr,newStr)=>{
 }
 ```
 > 后端的其他部分说明可参见我这两篇文章：https://www.cnblogs.com/sanhuamao/p/16244467.html、https://www.cnblogs.com/sanhuamao/p/16227089.html
+
 
 
 
