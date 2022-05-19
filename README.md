@@ -22,7 +22,7 @@
     ```
 - mydb：数据库
     ![mysql](https://s2.loli.net/2022/05/19/Z5nS2AKjkqY1ORi.png)
-
+> 系统的超级管理员账号：admin；密码：123456
 # 二 文件结构
 
 ## 前端结构
